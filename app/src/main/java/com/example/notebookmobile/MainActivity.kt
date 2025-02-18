@@ -1,21 +1,12 @@
 package com.example.notebookmobile
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.notebookmobile.ui.theme.NotebookMobileTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,11 +22,13 @@ class MainActivity : ComponentActivity() {
             val textItem = layoutInflater.inflate(R.layout.text_item, null)
             val editText = textItem.findViewById<EditText>(R.id.editTextTextMultiLine)
             val executeButton = textItem.findViewById<Button>(R.id.executeButton)
+            val responseTextView = textItem.findViewById<TextView>(R.id.textResponse)
+
             container.addView(textItem)
 
             executeButton.setOnClickListener {
-                val text = editText.text.toString()
-                Log.d("MainActivity", "Texto: $text")
+                val response = editText.text.toString()
+                responseTextView.text = response
             }
         }
 
@@ -43,11 +36,13 @@ class MainActivity : ComponentActivity() {
             val codeItem = layoutInflater.inflate(R.layout.code_item, null)
             val editText = codeItem.findViewById<EditText>(R.id.editTextTextMultiLine)
             val executeButton = codeItem.findViewById<Button>(R.id.executeButton)
+            val responseTextView = codeItem.findViewById<TextView>(R.id.codeResponse)
+
             container.addView(codeItem)
 
             executeButton.setOnClickListener {
-                val code = editText.text.toString()
-                Log.d("MainActivity", "Código: $code")
+                val response = editText.text.toString()
+                responseTextView.text = response
             }
         }
     }

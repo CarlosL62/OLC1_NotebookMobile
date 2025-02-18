@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/textResponse"
+        android:layout_width="337dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="60dp"
+        android:text="---"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+
     <Button
         android:id="@+id/executeButton"
         android:layout_width="56dp"
