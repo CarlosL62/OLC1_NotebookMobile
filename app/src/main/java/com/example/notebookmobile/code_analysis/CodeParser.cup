@@ -1,0 +1,17 @@
+package com.example.notebookmobile.code_analysis;
+
+// Declaraciones iniciales
+import java_cup.runtime.*;
+
+// Terminales y no terminales
+terminal String IDENTIFIER;
+terminal Integer NUMBER;
+terminal INT_KEYWORD, ASSIGN;
+
+non terminal void program;
+
+start with program;
+
+// Reglas de producción
+program ::= INT_KEYWORD IDENTIFIER ASSIGN NUMBER
+         {: System.out.println("Declaración de variable válida: " + $2 + " = " + $4); :};

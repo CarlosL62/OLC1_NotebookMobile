@@ -37,6 +37,12 @@ android {
     buildFeatures {
         compose = true
     }
+
+    /*sourceSets {
+        getByName("main") {
+            java.srcDir("src/main/java/com/example/notebookmobile")
+        }
+    }*/
 }
 
 dependencies {
@@ -57,4 +63,51 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Implementations for the lexer and parser
+    implementation(files("src/main/java/com/example/notebookmobile/libs/jflex-full-1.9.1.jar"))
+    implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b.jar"))
+    implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b-runtime.jar"))
 }
+
+// TASKS TO GENERATE LEXERS AND PARSERS
+tasks.register("generateAnalyzers") {
+    group = "code generation"
+    description = "Generates the lexer and parser using JFlex and CUP"
+
+    doFirst {
+        println("Generating lexers from TextLexer.flex and CodeLexer.flex...")
+        javaexec {
+            classpath = files("/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/libs/jflex-full-1.9.1.jar")
+            mainClass.set("jflex.Main")
+            args = listOf(
+                "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/text_analysis/TextLexer.flex",
+                "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/code_analysis/CodeLexer.flex"
+            )
+        }
+
+        println("Generating parsers from TextParser.cup and CodeParser.cup...")
+        javaexec {
+            classpath = files("/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/libs/java-cup-11b.jar")
+            mainClass.set("java_cup.Main")
+            args = listOf(
+                "-destdir", "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/text_analysis",
+                "-parser", "TextParser",
+                "-symbols", "TextSym",
+                "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/text_analysis/TextParser.cup"
+            )
+        }
+
+        javaexec {
+            classpath = files("/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/libs/java-cup-11b.jar")
+            mainClass.set("java_cup.Main")
+            args = listOf(
+                "-destdir", "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/code_analysis",
+                "-parser", "CodeParser",
+                "-symbols", "CodeSym",
+                "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/code_analysis/CodeParser.cup"
+            )
+        }
+    }
+}
+
+

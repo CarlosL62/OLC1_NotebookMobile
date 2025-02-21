@@ -1,7 +1,7 @@
 
 %%
 
-%class MarkdownLexer
+%class TextLexer
 %unicode
 %public
 

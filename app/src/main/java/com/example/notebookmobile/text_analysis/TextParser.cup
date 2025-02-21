@@ -1,0 +1,14 @@
+package com.example.notebookmobile.text_analysis;
+
+// Declaraciones iniciales
+import java_cup.runtime.*;
+
+// Terminales y no terminales
+terminal String WORD;
+non terminal void program;
+
+start with program;
+
+// Reglas de producción
+program ::= WORD
+         {: System.out.println("Texto analizado correctamente: " + $1); :};
