@@ -4,11 +4,10 @@ package com.example.notebookmobile.text_analysis;
 import java_cup.runtime.*;
 
 // Terminales y no terminales
-terminal String WORD;
-non terminal void program;
+terminal WORD;
+non terminal program;
 
 start with program;
 
 // Reglas de producción
-program ::= WORD
-         {: System.out.println("Texto analizado correctamente: " + $1); :};
+program ::= WORD;

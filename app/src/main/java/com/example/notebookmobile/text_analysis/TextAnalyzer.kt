@@ -3,6 +3,7 @@ package com.example.notebookmobile.text_analysis
 import java.io.StringReader
 
 class TextAnalyzer {
+    /*
     fun analyze(input: String): String {
         return try {
             // Crear el lexer a partir del texto ingresado
@@ -21,4 +22,5 @@ class TextAnalyzer {
             "Error: ${e.message}"
         }
     }
+    */
 }

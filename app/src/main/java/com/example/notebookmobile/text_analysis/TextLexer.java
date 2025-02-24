@@ -645,7 +645,7 @@ class TextLexer implements java_cup.runtime.Scanner {
           // fall through
           case 3: break;
           case 2:
-            { return new java_cup.runtime.Symbol(sym.WORD, yytext());
+            { return new java_cup.runtime.Symbol(sym.WORD);
             }
           // fall through
           case 4: break;

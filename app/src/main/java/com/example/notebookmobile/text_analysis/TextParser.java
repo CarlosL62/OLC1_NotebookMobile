@@ -14,7 +14,7 @@ import java_cup.runtime.XMLElement;
 public class TextParser extends java_cup.runtime.lr_parser {
 
  public final Class getSymbolContainer() {
-    return TextSym.class;
+    return sym.class;
 }
 
   /** Default constructor. */
@@ -118,7 +118,7 @@ class CUP$TextParser$actions {
               Object RESULT =null;
 		int start_valleft = ((java_cup.runtime.Symbol)CUP$TextParser$stack.elementAt(CUP$TextParser$top-1)).left;
 		int start_valright = ((java_cup.runtime.Symbol)CUP$TextParser$stack.elementAt(CUP$TextParser$top-1)).right;
-		void start_val = (void)((java_cup.runtime.Symbol) CUP$TextParser$stack.elementAt(CUP$TextParser$top-1)).value;
+		Object start_val = (Object)((java_cup.runtime.Symbol) CUP$TextParser$stack.elementAt(CUP$TextParser$top-1)).value;
 		RESULT = start_val;
               CUP$TextParser$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$TextParser$stack.elementAt(CUP$TextParser$top-1)), ((java_cup.runtime.Symbol)CUP$TextParser$stack.peek()), RESULT);
             }
@@ -129,8 +129,8 @@ class CUP$TextParser$actions {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 1: // program ::= WORD 
             {
-              void RESULT =null;
-		 System.out.println("Texto analizado correctamente: " + $1); 
+              Object RESULT =null;
+
               CUP$TextParser$result = parser.getSymbolFactory().newSymbol("program",0, ((java_cup.runtime.Symbol)CUP$TextParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$TextParser$stack.peek()), RESULT);
             }
           return CUP$TextParser$result;

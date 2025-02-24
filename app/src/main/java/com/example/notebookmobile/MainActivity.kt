@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import com.example.notebookmobile.code_analysis.Analyzer
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,9 +41,11 @@ class MainActivity : ComponentActivity() {
 
             container.addView(codeItem)
 
+
             executeButton.setOnClickListener {
                 val response = editText.text.toString()
-                responseTextView.text = response
+                val analyzer = Analyzer(responseTextView)
+                analyzer.executeCode(response)
             }
         }
     }

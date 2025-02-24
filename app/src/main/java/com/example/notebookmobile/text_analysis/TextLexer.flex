@@ -8,6 +8,6 @@ package com.example.notebookmobile.text_analysis;
 
 %%
 
-[a-zA-Z]+              { return new java_cup.runtime.Symbol(sym.WORD, yytext()); }
+[a-zA-Z]+              { return new java_cup.runtime.Symbol(sym.WORD); }
 [ \t\r\n]+             { /* Ignorar espacios en blanco */ }
 <<EOF>>                { return new java_cup.runtime.Symbol(sym.EOF); }

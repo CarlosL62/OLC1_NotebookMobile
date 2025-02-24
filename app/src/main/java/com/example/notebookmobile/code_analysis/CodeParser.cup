@@ -1,17 +1,239 @@
 package com.example.notebookmobile.code_analysis;
 
-// Declaraciones iniciales
 import java_cup.runtime.*;
+import java.util.*;
 
-// Terminales y no terminales
-terminal String IDENTIFIER;
-terminal Integer NUMBER;
-terminal INT_KEYWORD, ASSIGN;
+import com.example.notebookmobile.code_analysis.instructions.*;
+import com.example.notebookmobile.code_analysis.expressions.*;
+import com.example.notebookmobile.code_analysis.utils.*;
 
-non terminal void program;
+parser code {:
+    // Fields
+    CodeLexer lex;
+    private List<String> syntaxErrors;
+    private Analyzer analyzer;
 
-start with program;
+    // Connect the parser with the lexer
+    public CodeParser(CodeLexer lex, Analyzer analyzer){
+        super(lex);
+        this.analyzer = analyzer;
+        syntaxErrors = new LinkedList<>();
+    }
 
-// Reglas de producción
-program ::= INT_KEYWORD IDENTIFIER ASSIGN NUMBER
-         {: System.out.println("Declaración de variable válida: " + $2 + " = " + $4); :};
+    // Getters
+    public CodeLexer getLexer(){
+        return this.lex;
+    }
+    public List<String> getSyntaxErrors(){
+        return this.syntaxErrors;
+    }
+
+    /* Overwrite error methods */
+    public void syntax_error(Symbol cur_token) {
+        StringBuilder mssBuilder = new StringBuilder("Simbolo: ");
+        mssBuilder.append(symbl_name_from_id(cur_token.sym));
+
+        if(cur_token.value != null){
+            mssBuilder.append(", lexema <");
+            mssBuilder.append(cur_token.value.toString());
+            mssBuilder.append(">");
+        }
+        mssBuilder.append(", linea: ");
+        mssBuilder.append(cur_token.left);
+        mssBuilder.append(", columna: ");
+        mssBuilder.append(cur_token.right);
+
+        if (expected_token_ids().isEmpty()) {
+            mssBuilder.append(" -- ya no se esperaba ningun simbolo");
+        } else {
+            mssBuilder.append(" -- Se esperaba [");
+            for (Integer expected_token_id : expected_token_ids()) {
+                if(!symbl_name_from_id(expected_token_id).equals("error")){
+                    mssBuilder.append(symbl_name_from_id(expected_token_id));
+                    mssBuilder.append(" ");
+                }
+
+            }
+            mssBuilder.append("]");
+        }
+        syntaxErrors.add(mssBuilder.toString());
+    }
+
+    public void report_error(String message, Object info){
+        try{
+            Symbol cur_token = (Symbol) info;
+            StringBuilder mssBuilder = new StringBuilder("Simbolo: ");
+            mssBuilder.append(symbl_name_from_id(cur_token.sym));
+            mssBuilder.append(", linea: ");
+            mssBuilder.append(cur_token.left);
+            mssBuilder.append(", columna: ");
+            mssBuilder.append(cur_token.right);
+            if(cur_token != null){
+                mssBuilder.append(", Lexema: ");
+                mssBuilder.append(cur_token.value);
+            }
+
+            if(message != null){
+                mssBuilder.append(", Info: ");
+                mssBuilder.append(message);
+            }
+
+            syntaxErrors.add(mssBuilder.toString());
+        } catch (Exception e){
+            syntaxErrors.add(message);
+        }
+    }
+
+
+    public void unrecovered_syntax_error(Symbol cur_token) {
+        syntaxErrors.add("Errores de sintaxis severos detectados, revisa municiosamente el codigo");
+    }
+:}
+
+/*---------------------------------------
+             Declarations
+-----------------------------------------*/
+/* Terminals (tokens returned by the scanner). */
+terminal PLUS, MINUS, TIMES, POWER, DIV,
+           LPAREN, RPAREN, EQUALS,
+           PRINT, PLOT, FORMAT,
+           UMINUS;
+
+terminal String     ID, STRING_LIT;
+terminal Float    INTEGER_LIT, FLOAT_LIT;
+
+
+/*----------------------------- Non-terminals ---------------------------------------*/
+
+non terminal s;
+non terminal List<Instruction>  instructions;
+
+non terminal Expression operable, expression;
+non terminal Instruction print_function, assignation, instruction;
+
+/*------------------------------------------------------------------------------
+                                 Precedences
+--------------------------------------------------------------------------------*/
+precedence left PLUS, MINUS;
+precedence left TIMES, DIV;
+precedence left POWER;
+precedence right UMINUS;
+
+
+
+/* --------------------------------------
+                Grammar
+-----------------------------------------*/
+start with s;
+
+s ::= instructions:list
+        {:
+
+            analyzer.execute(list);
+        :}
+    ;
+
+instructions ::= instruction:i
+        {:
+            List<Instruction> list = new LinkedList<Instruction>();
+            list.add(i);
+            RESULT = list;
+        :}
+    | instruction:i instructions:l
+        {:
+            l.add(0, i);
+            RESULT = l;
+        :}
+    ;
+
+instruction ::= assignation:i
+        {: RESULT = i; :}
+    | print_function:i
+        {: RESULT = i; :}
+    ;
+
+assignation ::= ID:i EQUALS operable:e
+        {:
+            RESULT = new Assignation(i, e, new Position(ileft, iright));
+        :}
+    ;
+
+print_function ::= PRINT:p LPAREN expression:e RPAREN
+        {:
+            RESULT = new PrintFunction(e, new Position(pleft, pright));
+        :}
+
+    ;
+
+expression ::= operable:e
+            {: RESULT = e; :}
+    | STRING_LIT:l
+            {: RESULT = new Literal(l); :}
+    ;
+
+operable ::= operable:e1 PLUS:o operable:e2
+            {:
+                RESULT = new Operation(
+                    DefineOperation.PLUS,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | operable:e1 MINUS:o operable:e2
+            {:
+                RESULT = new Operation(
+                    DefineOperation.MINUS,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | operable:e1 DIV:o operable:e2
+            {:
+                RESULT = new Operation(
+                    DefineOperation.DIV,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | operable:e1 TIMES:o operable:e2
+            {:
+                RESULT = new Operation(
+                    DefineOperation.TIMES,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | operable:e1 POWER:o operable:e2
+            {:
+                RESULT = new Operation(
+                    DefineOperation.POWER,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    %prec UMINUS
+    | LPAREN operable:e RPAREN
+            {: RESULT = e; :}
+    %prec UMINUS
+    | PLUS:o operable:e
+            {:
+                RESULT = new UnaryOperation(
+                    DefineOperation.PLUS, e, new Position(oleft, oright)
+                );
+            :}
+    %prec UMINUS
+    | MINUS:o operable:e
+            {:
+                RESULT = new UnaryOperation(
+                    DefineOperation.MINUS, e, new Position(oleft, oright)
+                );
+            :}
+    | INTEGER_LIT:l
+            {: RESULT = new Literal(l); :}
+    | FLOAT_LIT:l
+            {: RESULT = new Literal(l); :}
+    | ID:i
+            {:
+                RESULT = new VariableAccess(i, new Position(ileft, iright)) ;
+            :}
+    ;

@@ -64,8 +64,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     // Implementations for the lexer and parser
-    implementation(files("src/main/java/com/example/notebookmobile/libs/jflex-full-1.9.1.jar"))
-    implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b.jar"))
+    //implementation(files("src/main/java/com/example/notebookmobile/libs/jflex-full-1.9.1.jar"))
+    //implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b.jar"))
     implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b-runtime.jar"))
 }
 
@@ -92,7 +92,7 @@ tasks.register("generateAnalyzers") {
             args = listOf(
                 "-destdir", "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/text_analysis",
                 "-parser", "TextParser",
-                "-symbols", "TextSym",
+                "-symbols", "sym",
                 "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/text_analysis/TextParser.cup"
             )
         }
@@ -103,7 +103,7 @@ tasks.register("generateAnalyzers") {
             args = listOf(
                 "-destdir", "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/code_analysis",
                 "-parser", "CodeParser",
-                "-symbols", "CodeSym",
+                "-symbols", "sym",
                 "/home/carloslopez/AndroidStudioProjects/NotebookMobile/app/src/main/java/com/example/notebookmobile/code_analysis/CodeParser.cup"
             )
         }
