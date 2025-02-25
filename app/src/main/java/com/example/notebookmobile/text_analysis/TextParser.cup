@@ -1,13 +1,166 @@
 package com.example.notebookmobile.text_analysis;
 
-// Declaraciones iniciales
 import java_cup.runtime.*;
+import java.util.*;
+import com.example.notebookmobile.text_analysis.elements.*;
 
-// Terminales y no terminales
-terminal WORD;
-non terminal program;
+parser code {:
+    // Fields
+    private TextLexer lex;
+    private List<String> syntaxErrors;
+    private List<Element> elements;
 
-start with program;
+    // Connect the parser with the lexer
+    public TextParser(TextLexer lex) {
+        super(lex);
+        this.lex = lex;
+        this.syntaxErrors = new LinkedList<>();
+        this.elements = new ArrayList<>();
+    }
 
-// Reglas de producción
-program ::= WORD;
+    // Getters
+    public TextLexer getLexer() {
+        return this.lex;
+    }
+
+    public List<String> getSyntaxErrors() {
+        return this.syntaxErrors;
+    }
+
+    public List<Element> getElements() {
+        return this.elements;
+    }
+
+    /* Overwrite error methods */
+    public void syntax_error(Symbol cur_token) {
+        StringBuilder mssBuilder = new StringBuilder("Símbolo: ");
+        mssBuilder.append(symbl_name_from_id(cur_token.sym));
+
+        if (cur_token.value != null) {
+            mssBuilder.append(", lexema <");
+            mssBuilder.append(cur_token.value.toString());
+            mssBuilder.append(">");
+        }
+        mssBuilder.append(", línea: ");
+        mssBuilder.append(cur_token.left);
+        mssBuilder.append(", columna: ");
+        mssBuilder.append(cur_token.right);
+
+        if (expected_token_ids().isEmpty()) {
+            mssBuilder.append(" -- No se esperaba ningún símbolo");
+        } else {
+            mssBuilder.append(" -- Se esperaba [");
+            for (Integer expected_token_id : expected_token_ids()) {
+                if (!symbl_name_from_id(expected_token_id).equals("error")) {
+                    mssBuilder.append(symbl_name_from_id(expected_token_id));
+                    mssBuilder.append(" ");
+                }
+            }
+            mssBuilder.append("]");
+        }
+        syntaxErrors.add(mssBuilder.toString());
+    }
+
+    public void report_error(String message, Object info) {
+        try {
+            Symbol cur_token = (Symbol) info;
+            StringBuilder mssBuilder = new StringBuilder("Símbolo: ");
+            mssBuilder.append(symbl_name_from_id(cur_token.sym));
+            mssBuilder.append(", línea: ");
+            mssBuilder.append(cur_token.left);
+            mssBuilder.append(", columna: ");
+            mssBuilder.append(cur_token.right);
+            if (cur_token != null) {
+                mssBuilder.append(", Lexema: ");
+                mssBuilder.append(cur_token.value);
+            }
+
+            if (message != null) {
+                mssBuilder.append(", Info: ");
+                mssBuilder.append(message);
+            }
+
+            syntaxErrors.add(mssBuilder.toString());
+        } catch (Exception e) {
+            syntaxErrors.add(message);
+        }
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token) {
+        syntaxErrors.add("Errores de sintaxis severos detectados, revisa minuciosamente el código.");
+    }
+
+    // Method to add an element to the list
+    public void addElement(Element element) {
+        elements.add(element);
+    }
+:}
+
+/*---------------------------------------
+             Declarations
+-----------------------------------------*/
+
+/* Tokens */
+terminal String STRING_LIT;
+terminal String BOLD;
+terminal String ITALIC;
+terminal String BOLD_ITALIC;
+terminal String HEADER1;
+terminal String HEADER2;
+terminal String HEADER3;
+terminal String HEADER4;
+terminal String HEADER5;
+terminal String HEADER6;
+terminal String ORDERED_LIST_ITEM;
+terminal String NOT_ORDERED_LIST_ITEM;
+
+/* No terminales */
+non terminal List<Element> s, elements;
+non terminal Element element, header, list, text;
+
+/*---------------------------------------
+               Precedences
+-----------------------------------------*/
+
+
+/* --------------------------------------
+                Grammar
+-----------------------------------------*/
+
+start with s;
+
+s ::= elements:e {:
+    for (Element elem : e) {
+        parser.addElement(elem);
+    }
+    RESULT = e;
+:};
+
+elements ::= elements:e element:t {:
+    e.add(t);
+    RESULT = e;
+:}
+          | element:t {:
+    List<Element> list = new ArrayList<>();
+    list.add(t);
+    RESULT = list;
+:};
+
+element ::= header:h {: RESULT = h; :}
+          | list:l {: RESULT = l; :}
+          | text:t {: RESULT = t; :};
+
+header ::= HEADER1:h {: RESULT = new Header(1, h); :}
+         | HEADER2:h {: RESULT = new Header(2, h); :}
+         | HEADER3:h {: RESULT = new Header(3, h); :}
+         | HEADER4:h {: RESULT = new Header(4, h); :}
+         | HEADER5:h {: RESULT = new Header(5, h); :}
+         | HEADER6:h {: RESULT = new Header(6, h); :};
+
+list ::= ORDERED_LIST_ITEM:l {: RESULT = new OrderedList(l); :}
+       | NOT_ORDERED_LIST_ITEM:l {: RESULT = new UnorderedList(l); :};
+
+text ::= STRING_LIT:t {: RESULT = new StringLit(t); :}
+       | BOLD:t {: RESULT = new Bold(t); :}
+       | ITALIC:t {: RESULT = new Italic(t); :}
+       | BOLD_ITALIC:t {: RESULT = new BoldItalic(t); :};

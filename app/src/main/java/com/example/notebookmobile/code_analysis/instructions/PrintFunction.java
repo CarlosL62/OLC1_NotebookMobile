@@ -22,5 +22,6 @@ public class PrintFunction extends Instruction {
     @Override
     public void execute(HashMap<String, Object> symbolsTable, StringBuilder terminal, List<String> semanticErrors) {
         terminal.append(value.execute(symbolsTable, terminal, semanticErrors));
+        terminal.append("\n");
     }
 }

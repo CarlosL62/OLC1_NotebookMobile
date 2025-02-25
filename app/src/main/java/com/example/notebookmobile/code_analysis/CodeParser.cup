@@ -97,7 +97,7 @@ parser code {:
 terminal PLUS, MINUS, TIMES, POWER, DIV,
            LPAREN, RPAREN, EQUALS,
            PRINT, PLOT, FORMAT,
-           UMINUS;
+           UMINUS, COMMA;
 
 terminal String     ID, STRING_LIT;
 terminal Float    INTEGER_LIT, FLOAT_LIT;
@@ -109,7 +109,7 @@ non terminal s;
 non terminal List<Instruction>  instructions;
 
 non terminal Expression operable, expression;
-non terminal Instruction print_function, assignation, instruction;
+non terminal Instruction print_function, plot_function, format_function, mathFunction, assignation, instruction;
 
 /*------------------------------------------------------------------------------
                                  Precedences
@@ -150,6 +150,8 @@ instruction ::= assignation:i
         {: RESULT = i; :}
     | print_function:i
         {: RESULT = i; :}
+    | plot_function:i
+        {: RESULT = i; :}
     ;
 
 assignation ::= ID:i EQUALS operable:e
@@ -162,7 +164,18 @@ print_function ::= PRINT:p LPAREN expression:e RPAREN
         {:
             RESULT = new PrintFunction(e, new Position(pleft, pright));
         :}
+    ;
 
+plot_function ::= PLOT:p LPAREN operable:e COMMA operable:e1 COMMA operable:e2 RPAREN
+        {:
+            //TODO
+        :}
+    ;
+
+format_function ::= FORMAT:f LPAREN operable:s RPAREN
+        {:
+            //TODO
+        :}
     ;
 
 expression ::= operable:e

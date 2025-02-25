@@ -13,6 +13,7 @@ import java.util.*;
 %cup
 %line
 %column
+%debug
 %init{
     errorsList = new LinkedList<>();
     string = new StringBuilder();
@@ -82,6 +83,7 @@ OctDigit          = [0-7]
     /* delimitators */
         "("             { return symbol(sym.LPAREN); }
         ")"             { return symbol(sym.RPAREN); }
+        ","             { return symbol(sym.COMMA); }
 
 
     /*-------------------------------------------------------------

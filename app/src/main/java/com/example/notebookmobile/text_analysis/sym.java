@@ -8,13 +8,35 @@ package com.example.notebookmobile.text_analysis;
 /** CUP generated class containing symbol constants. */
 public class sym {
   /* terminals */
-  public static final int WORD = 2;
-  public static final int error = 1;
+  public static final int HEADER2 = 7;
+  public static final int HEADER1 = 6;
+  public static final int ITALIC = 4;
   public static final int EOF = 0;
+  public static final int BOLD = 3;
+  public static final int error = 1;
+  public static final int STRING_LIT = 2;
+  public static final int BOLD_ITALIC = 5;
+  public static final int ORDERED_LIST_ITEM = 12;
+  public static final int HEADER6 = 11;
+  public static final int HEADER5 = 10;
+  public static final int HEADER4 = 9;
+  public static final int NOT_ORDERED_LIST_ITEM = 13;
+  public static final int HEADER3 = 8;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
-  "WORD"
+  "STRING_LIT",
+  "BOLD",
+  "ITALIC",
+  "BOLD_ITALIC",
+  "HEADER1",
+  "HEADER2",
+  "HEADER3",
+  "HEADER4",
+  "HEADER5",
+  "HEADER6",
+  "ORDERED_LIST_ITEM",
+  "NOT_ORDERED_LIST_ITEM"
   };
 }
 

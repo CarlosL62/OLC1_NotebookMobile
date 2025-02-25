@@ -8,7 +8,7 @@
     <TextView
         android:id="@+id/codeResponse"
         android:layout_width="335dp"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:text="---"
         app:layout_constraintStart_toStartOf="parent"

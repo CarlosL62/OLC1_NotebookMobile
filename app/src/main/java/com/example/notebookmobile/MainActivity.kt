@@ -29,7 +29,8 @@ class MainActivity : ComponentActivity() {
 
             executeButton.setOnClickListener {
                 val response = editText.text.toString()
-                responseTextView.text = response
+                val analyzer = com.example.notebookmobile.text_analysis.Analyzer(responseTextView)
+                analyzer.analyzeText(response)
             }
         }
 

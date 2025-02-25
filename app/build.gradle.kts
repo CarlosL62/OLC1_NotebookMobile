@@ -67,6 +67,10 @@ dependencies {
     //implementation(files("src/main/java/com/example/notebookmobile/libs/jflex-full-1.9.1.jar"))
     //implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b.jar"))
     implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b-runtime.jar"))
+    // Implementation for math expression evaluator
+    //implementation(libs.exp4j)
+    // Implementation for math view
+    //implementation(libs.mathview)
 }
 
 // TASKS TO GENERATE LEXERS AND PARSERS
