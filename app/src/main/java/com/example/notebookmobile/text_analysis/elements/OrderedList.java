@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 public class OrderedList extends Element {
     private String content;
+    static int count = 1;
 
     public OrderedList(String content) {
         this.content = content;
@@ -11,15 +12,8 @@ public class OrderedList extends Element {
 
     @Override
     public void execute(TextView response) {
-        String[] items = content.split("\n");
-        StringBuilder formattedText = new StringBuilder();
-
-        int index = 1;
-        for (String item : items) {
-            formattedText.append(index).append(". ").append(item).append("\n");
-            index++;
-        }
-
-        response.append(formattedText.toString());
+        final int index = count;
+        response.append(index + ". " + content + "\n");
+        count++;
     }
 }

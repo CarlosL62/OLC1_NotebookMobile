@@ -19,10 +19,10 @@ import java.util.*;
 %init}
 
 /**************************** States **********************************/
-%state STRING
 %state HEADER6, HEADER5, HEADER4, HEADER3, HEADER2, HEADER1
 %state BOLD_ITALIC, BOLD, ITALIC
 %state ORDERED_LIST, NOT_ORDERED_LIST
+%state STRING_LIT
 
 /**************************** macros **********************************/
 LineTerminator = \r|\n|\r\n
@@ -33,7 +33,6 @@ Identifier = [:jletter:] ([:jletterdigit:]|_)*
 SimpleBoolean = 0|1
 DecIntegerLiteral = [0-9]+
 DecFloatLiteral = {DecIntegerLiteral}\.{DecIntegerLiteral}
-StringCharacter = [^\r\n\"\\]
 OctDigit = [0-7]
 
 %{
@@ -99,97 +98,80 @@ DOT = \.
     // Not ordered list
     "+" { string.setLength(0); yybegin(NOT_ORDERED_LIST); }
 
-    // Text
-    . { string.setLength(0); yybegin(STRING); }
+    // Text (todo lo demás es texto normal)
+    . { string.setLength(0); string.append(yytext()); yybegin(STRING_LIT); }
 }
 
 /* Headers */
-<HEADER6> {
-    {LineTerminator} {
+<HEADER6, HEADER5, HEADER4, HEADER3, HEADER2, HEADER1> {
+    [^\r\n]+ { string.append(yytext()); }
+
+    {LineTerminator}? {
+        int type =
+            yystate() == HEADER6 ? sym.HEADER6 :
+            yystate() == HEADER5 ? sym.HEADER5 :
+            yystate() == HEADER4 ? sym.HEADER4 :
+            yystate() == HEADER3 ? sym.HEADER3 :
+            yystate() == HEADER2 ? sym.HEADER2 :
+            sym.HEADER1;
+
         yybegin(YYINITIAL);
-        return symbol(sym.HEADER6, string.toString());
+        return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
     }
-    . { string.append(yytext()); }
-}
-<HEADER5> {
-    {LineTerminator} {
-        yybegin(YYINITIAL);
-        return symbol(sym.HEADER5, string.toString());
-    }
-    . { string.append(yytext()); }
-}
-<HEADER4> {
-    {LineTerminator} {
-        yybegin(YYINITIAL);
-        return symbol(sym.HEADER4, string.toString());
-    }
-    . { string.append(yytext()); }
-}
-<HEADER3> {
-    {LineTerminator} {
-        yybegin(YYINITIAL);
-        return symbol(sym.HEADER3, string.toString());
-    }
-    . { string.append(yytext()); }
-}
-<HEADER2> {
-    {LineTerminator} {
-        yybegin(YYINITIAL);
-        return symbol(sym.HEADER2, string.toString());
-    }
-    . { string.append(yytext()); }
-}
-<HEADER1> {
-    {LineTerminator} {
-        yybegin(YYINITIAL);
-        return symbol(sym.HEADER1, string.toString());
-    }
-    . { string.append(yytext()); }
+
+    <<EOF>> {
+          int type =
+              yystate() == HEADER6 ? sym.HEADER6 :
+              yystate() == HEADER5 ? sym.HEADER5 :
+              yystate() == HEADER4 ? sym.HEADER4 :
+              yystate() == HEADER3 ? sym.HEADER3 :
+              yystate() == HEADER2 ? sym.HEADER2 :
+              sym.HEADER1;
+
+              yybegin(YYINITIAL);
+              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+      }
 }
 
 /* Bold, Italic, and Bold-Italic */
 <BOLD_ITALIC> {
-    "***" { yybegin(YYINITIAL); return symbol(sym.BOLD_ITALIC, string.toString()); }
-    . { string.append(yytext()); }
+    "***" { yybegin(YYINITIAL); return symbol(sym.BOLD_ITALIC, string.toString().trim()); }
+        [^\r\n] { string.append(yytext()); }
+        {LineTerminator} { string.append("\n"); }
 }
 <BOLD> {
-    "**" { yybegin(YYINITIAL); return symbol(sym.BOLD, string.toString()); }
-    . { string.append(yytext()); }
+    "**" { yybegin(YYINITIAL); return symbol(sym.BOLD, string.toString().trim()); }
+    [^\r\n] { string.append(yytext()); }
+    {LineTerminator} { string.append("\n"); }
 }
 <ITALIC> {
-    "*" { yybegin(YYINITIAL); return symbol(sym.ITALIC, string.toString()); }
-    . { string.append(yytext()); }
+    "*" { yybegin(YYINITIAL); return symbol(sym.ITALIC, string.toString().trim()); }
+    [^\r\n] { string.append(yytext()); }
+    {LineTerminator} { string.append("\n"); }
 }
 
 /* Ordered and Not Ordered Lists */
 <ORDERED_LIST> {
     {LineTerminator} { yybegin(YYINITIAL); return symbol(sym.ORDERED_LIST_ITEM, string.toString()); }
+    <<EOF>> { yybegin(YYINITIAL); return symbol(sym.ORDERED_LIST_ITEM, string.toString()); }
     . { string.append(yytext()); }
 }
 <NOT_ORDERED_LIST> {
     {LineTerminator} { yybegin(YYINITIAL); return symbol(sym.NOT_ORDERED_LIST_ITEM, string.toString()); }
+     <<EOF>> { yybegin(YYINITIAL); return symbol(sym.NOT_ORDERED_LIST_ITEM, string.toString()); }
     . { string.append(yytext()); }
 }
 
-
-/* Strings */
-<STRING> {
-    \" { yybegin(YYINITIAL); return symbol(sym.STRING_LIT, string.toString()); }
-    {StringCharacter}+ { string.append(yytext()); }
-    "\\b" { string.append('\b'); }
-    "\\t" { string.append('\t'); }
-    "\\n" { string.append('\n'); }
-    "\\f" { string.append('\f'); }
-    "\\r" { string.append('\r'); }
-    "\\\"" { string.append('\"'); }
-    "\\'" { string.append('\''); }
-    "\\\\" { string.append('\\'); }
-    \\[0-3]?{OctDigit}?{OctDigit} {
-        char val = (char) Integer.parseInt(yytext().substring(1), 8);
-        string.append(val);
+<STRING_LIT> {
+    [^\r\n]+ { string.append(yytext()); }
+    {LineTerminator} {
+        yybegin(YYINITIAL);
+        return symbol(sym.STRING_LIT, string.toString().trim());
     }
-    . { error("Secuencia ilegal de escape \"" + yytext() + "\""); }
-    {LineTerminator} { error("Literal de cadena sin terminar al final de la línea"); }
+    <<EOF>> {
+        yybegin(YYINITIAL);
+        return symbol(sym.STRING_LIT, string.toString().trim());
+    }
 }
 
 /* Ignored whitespace */

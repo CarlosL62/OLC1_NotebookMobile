@@ -20,18 +20,18 @@ public class TextLexer implements java_cup.runtime.Scanner {
 
   // Lexical states.
   public static final int YYINITIAL = 0;
-  public static final int STRING = 2;
-  public static final int HEADER6 = 4;
-  public static final int HEADER5 = 6;
-  public static final int HEADER4 = 8;
-  public static final int HEADER3 = 10;
-  public static final int HEADER2 = 12;
-  public static final int HEADER1 = 14;
-  public static final int BOLD_ITALIC = 16;
-  public static final int BOLD = 18;
-  public static final int ITALIC = 20;
-  public static final int ORDERED_LIST = 22;
-  public static final int NOT_ORDERED_LIST = 24;
+  public static final int HEADER6 = 2;
+  public static final int HEADER5 = 4;
+  public static final int HEADER4 = 6;
+  public static final int HEADER3 = 8;
+  public static final int HEADER2 = 10;
+  public static final int HEADER1 = 12;
+  public static final int BOLD_ITALIC = 14;
+  public static final int BOLD = 16;
+  public static final int ITALIC = 18;
+  public static final int ORDERED_LIST = 20;
+  public static final int NOT_ORDERED_LIST = 22;
+  public static final int STRING_LIT = 24;
 
   /**
    * ZZ_LEXSTATE[l] is the state in the DFA for the lexical state l
@@ -40,8 +40,8 @@ public class TextLexer implements java_cup.runtime.Scanner {
    * l is of the form l = 2*k, k a non negative integer
    */
   private static final int ZZ_LEXSTATE[] = {
-     0,  0,  1,  1,  2,  2,  3,  3,  4,  4,  5,  5,  6,  6,  7,  7, 
-     8,  8,  9,  9, 10, 10, 11, 11, 12, 12
+     0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  2,  2, 
+     3,  3,  4,  4,  5,  5,  6,  6,  7, 7
   };
 
   /**
@@ -78,11 +78,9 @@ public class TextLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_CMAP_BLOCKS = zzUnpackcmap_blocks();
 
   private static final String ZZ_CMAP_BLOCKS_PACKED_0 =
-    "\12\0\1\1\1\2\1\3\1\4\22\0\1\5\1\0"+
-    "\1\6\1\7\3\0\1\10\2\0\1\11\1\12\2\0"+
-    "\1\13\1\0\4\14\4\15\2\16\42\0\1\17\5\0"+
-    "\1\20\3\0\1\21\7\0\1\22\3\0\1\23\1\0"+
-    "\1\24\20\0\1\2\u01a2\0\2\2\326\0\u0100\2";
+    "\12\0\1\1\1\2\1\3\1\4\22\0\1\5\2\0"+
+    "\1\6\6\0\1\7\1\10\2\0\1\11\1\0\12\12"+
+    "\113\0\1\2\u01a2\0\2\2\326\0\u0100\2";
 
   private static int [] zzUnpackcmap_blocks() {
     int [] result = new int[1024];
@@ -109,16 +107,14 @@ public class TextLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\15\0\1\1\2\2\1\1\1\3\1\4\1\1\1\5"+
-    "\2\6\1\7\1\10\1\5\2\11\2\12\2\13\2\14"+
-    "\2\15\2\16\2\5\1\17\2\20\2\21\1\22\1\0"+
-    "\1\23\1\24\1\0\1\25\1\26\2\27\1\30\1\31"+
-    "\1\32\1\33\1\34\1\35\1\0\1\36\1\37\1\0"+
-    "\1\40\1\27\1\41\1\42\1\0\1\43\1\0\1\44"+
-    "\1\0\1\45";
+    "\1\0\1\1\6\0\1\2\2\3\1\2\1\4\1\5"+
+    "\1\2\1\6\2\1\1\6\2\7\2\6\1\10\2\11"+
+    "\2\12\2\13\1\14\1\0\1\15\1\16\2\0\1\17"+
+    "\1\20\1\0\1\21\1\22\1\23\1\0\1\24\1\0"+
+    "\1\25\1\0\1\26";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[74];
+    int [] result = new int[48];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -143,19 +139,15 @@ public class TextLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\25\0\52\0\77\0\124\0\151\0\176\0\223"+
-    "\0\250\0\275\0\322\0\347\0\374\0\u0111\0\u0111\0\u0126"+
-    "\0\u013b\0\u0150\0\u0111\0\u0165\0\u017a\0\u0111\0\u018f\0\u0111"+
-    "\0\u01a4\0\u0111\0\u0111\0\u01b9\0\u0111\0\u01ce\0\u0111\0\u01e3"+
-    "\0\u0111\0\u01f8\0\u0111\0\u020d\0\u0111\0\u0222\0\u0237\0\u024c"+
-    "\0\u0111\0\u0111\0\u0261\0\u0111\0\u0276\0\u0111\0\u028b\0\u02a0"+
-    "\0\u0111\0\u0165\0\u0111\0\u0111\0\u02b5\0\u02ca\0\u0111\0\u0111"+
-    "\0\u0111\0\u0111\0\u0111\0\u0111\0\u02df\0\u0111\0\u0111\0\u02f4"+
-    "\0\u0111\0\u0111\0\u0111\0\u0111\0\u0309\0\u0111\0\u031e\0\u0111"+
-    "\0\u0333\0\u0111";
+    "\0\0\0\13\0\26\0\41\0\54\0\67\0\102\0\115"+
+    "\0\130\0\130\0\143\0\156\0\171\0\130\0\204\0\217"+
+    "\0\130\0\232\0\130\0\130\0\245\0\260\0\273\0\130"+
+    "\0\130\0\306\0\130\0\321\0\130\0\334\0\130\0\347"+
+    "\0\362\0\130\0\204\0\375\0\130\0\130\0\u0108\0\130"+
+    "\0\130\0\130\0\u0113\0\130\0\u011e\0\130\0\u0129\0\130";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[74];
+    int [] result = new int[48];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -178,30 +170,22 @@ public class TextLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_TRANS = zzUnpacktrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\16\1\17\1\0\1\17\1\20\2\16\1\21\1\16"+
-    "\1\22\1\23\1\16\3\24\6\16\1\25\1\26\2\25"+
-    "\1\27\1\25\1\30\10\25\1\31\5\25\1\32\1\33"+
-    "\1\0\1\17\1\34\21\32\1\35\1\0\1\17\1\36"+
-    "\21\32\1\37\1\0\1\17\1\40\21\32\1\41\1\0"+
-    "\1\17\1\42\21\32\1\43\1\0\1\17\1\44\21\32"+
-    "\1\45\1\0\1\17\1\46\21\32\1\17\1\0\1\17"+
-    "\1\20\4\32\1\47\14\32\1\17\1\0\1\17\1\20"+
-    "\4\32\1\50\14\32\1\17\1\0\1\17\1\20\4\32"+
-    "\1\51\14\32\1\52\1\0\1\17\1\53\21\32\1\54"+
-    "\1\0\1\17\1\55\20\32\26\0\1\17\30\0\1\56"+
-    "\1\0\1\57\26\0\1\60\26\0\1\61\3\62\6\0"+
-    "\1\25\1\0\2\25\1\0\1\25\1\0\10\25\1\0"+
-    "\5\25\1\0\1\26\31\0\1\63\1\0\1\64\3\0"+
-    "\1\65\1\66\1\0\1\67\1\70\1\71\1\72\1\73"+
-    "\1\74\1\0\1\33\24\0\1\35\24\0\1\37\24\0"+
-    "\1\41\24\0\1\43\24\0\1\45\34\0\1\75\24\0"+
-    "\1\76\14\0\1\52\24\0\1\54\30\0\1\77\1\0"+
-    "\1\100\26\0\1\101\27\0\2\66\23\0\2\102\20\0"+
-    "\1\103\20\0\1\104\1\0\1\105\22\0\1\106\1\0"+
-    "\1\107\22\0\1\110\1\0\1\111\22\0\1\112\17\0";
+    "\1\11\1\12\1\0\1\12\1\13\1\11\1\14\1\15"+
+    "\1\16\1\11\1\17\1\20\1\21\2\20\1\22\6\20"+
+    "\1\23\1\24\2\23\1\25\2\23\1\26\4\23\1\24"+
+    "\2\23\1\25\2\23\1\27\4\23\1\24\2\23\1\25"+
+    "\2\23\1\30\4\23\1\31\1\0\1\12\1\32\7\23"+
+    "\1\33\1\0\1\12\1\34\6\23\1\20\1\35\2\20"+
+    "\1\36\6\20\14\0\1\12\16\0\1\37\1\40\13\0"+
+    "\1\41\14\0\1\42\1\43\1\20\1\0\2\20\1\0"+
+    "\6\20\1\0\1\21\12\0\1\24\20\0\1\44\12\0"+
+    "\1\45\4\0\1\31\12\0\1\33\12\0\1\35\16\0"+
+    "\1\46\1\47\13\0\1\50\12\0\1\51\10\0\1\52"+
+    "\1\53\11\0\1\54\1\55\11\0\1\56\1\57\11\0"+
+    "\1\60\5\0";
 
   private static int [] zzUnpacktrans() {
-    int [] result = new int[840];
+    int [] result = new int[308];
     int offset = 0;
     offset = zzUnpacktrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -244,15 +228,13 @@ public class TextLexer implements java_cup.runtime.Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\15\0\2\11\3\1\1\11\2\1\1\11\1\1\1\11"+
-    "\1\1\2\11\1\1\1\11\1\1\1\11\1\1\1\11"+
-    "\1\1\1\11\1\1\1\11\3\1\2\11\1\1\1\11"+
-    "\1\1\1\11\1\0\1\1\1\11\1\0\2\11\2\1"+
-    "\6\11\1\0\2\11\1\0\4\11\1\0\1\11\1\0"+
-    "\1\11\1\0\1\11";
+    "\1\0\1\1\6\0\2\11\3\1\1\11\2\1\1\11"+
+    "\1\1\2\11\3\1\2\11\1\1\1\11\1\1\1\11"+
+    "\1\1\1\11\1\0\1\1\1\11\2\0\2\11\1\0"+
+    "\3\11\1\0\1\11\1\0\1\11\1\0\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[74];
+    int [] result = new int[48];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -783,204 +765,226 @@ public class TextLexer implements java_cup.runtime.Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
+            switch (zzLexicalState) {
+            case HEADER6: {
+              int type =
+              yystate() == HEADER6 ? sym.HEADER6 :
+              yystate() == HEADER5 ? sym.HEADER5 :
+              yystate() == HEADER4 ? sym.HEADER4 :
+              yystate() == HEADER3 ? sym.HEADER3 :
+              yystate() == HEADER2 ? sym.HEADER2 :
+              sym.HEADER1;
+
+              yybegin(YYINITIAL);
+              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+            }  // fall though
+            case 49: break;
+            case HEADER5: {
+              int type =
+              yystate() == HEADER6 ? sym.HEADER6 :
+              yystate() == HEADER5 ? sym.HEADER5 :
+              yystate() == HEADER4 ? sym.HEADER4 :
+              yystate() == HEADER3 ? sym.HEADER3 :
+              yystate() == HEADER2 ? sym.HEADER2 :
+              sym.HEADER1;
+
+              yybegin(YYINITIAL);
+              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+            }  // fall though
+            case 50: break;
+            case HEADER4: {
+              int type =
+              yystate() == HEADER6 ? sym.HEADER6 :
+              yystate() == HEADER5 ? sym.HEADER5 :
+              yystate() == HEADER4 ? sym.HEADER4 :
+              yystate() == HEADER3 ? sym.HEADER3 :
+              yystate() == HEADER2 ? sym.HEADER2 :
+              sym.HEADER1;
+
+              yybegin(YYINITIAL);
+              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+            }  // fall though
+            case 51: break;
+            case HEADER3: {
+              int type =
+              yystate() == HEADER6 ? sym.HEADER6 :
+              yystate() == HEADER5 ? sym.HEADER5 :
+              yystate() == HEADER4 ? sym.HEADER4 :
+              yystate() == HEADER3 ? sym.HEADER3 :
+              yystate() == HEADER2 ? sym.HEADER2 :
+              sym.HEADER1;
+
+              yybegin(YYINITIAL);
+              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+            }  // fall though
+            case 52: break;
+            case HEADER2: {
+              int type =
+              yystate() == HEADER6 ? sym.HEADER6 :
+              yystate() == HEADER5 ? sym.HEADER5 :
+              yystate() == HEADER4 ? sym.HEADER4 :
+              yystate() == HEADER3 ? sym.HEADER3 :
+              yystate() == HEADER2 ? sym.HEADER2 :
+              sym.HEADER1;
+
+              yybegin(YYINITIAL);
+              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+            }  // fall though
+            case 53: break;
+            case HEADER1: {
+              int type =
+              yystate() == HEADER6 ? sym.HEADER6 :
+              yystate() == HEADER5 ? sym.HEADER5 :
+              yystate() == HEADER4 ? sym.HEADER4 :
+              yystate() == HEADER3 ? sym.HEADER3 :
+              yystate() == HEADER2 ? sym.HEADER2 :
+              sym.HEADER1;
+
+              yybegin(YYINITIAL);
+              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+            }  // fall though
+            case 54: break;
+            case ORDERED_LIST: {
+              yybegin(YYINITIAL); return symbol(sym.ORDERED_LIST_ITEM, string.toString());
+            }  // fall though
+            case 55: break;
+            case NOT_ORDERED_LIST: {
+              yybegin(YYINITIAL); return symbol(sym.NOT_ORDERED_LIST_ITEM, string.toString());
+            }  // fall though
+            case 56: break;
+            case STRING_LIT: {
+              yybegin(YYINITIAL);
+        return symbol(sym.STRING_LIT, string.toString().trim());
+            }  // fall though
+            case 57: break;
+            default:
               {
                 return symbol(sym.EOF);
               }
+        }
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { string.setLength(0); yybegin(STRING);
+            { int type =
+            yystate() == HEADER6 ? sym.HEADER6 :
+            yystate() == HEADER5 ? sym.HEADER5 :
+            yystate() == HEADER4 ? sym.HEADER4 :
+            yystate() == HEADER3 ? sym.HEADER3 :
+            yystate() == HEADER2 ? sym.HEADER2 :
+            sym.HEADER1;
+
+        yybegin(YYINITIAL);
+        return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
             }
           // fall through
-          case 38: break;
+          case 23: break;
           case 2:
+            { string.setLength(0); string.append(yytext()); yybegin(STRING_LIT);
+            }
+          // fall through
+          case 24: break;
+          case 3:
             { /* Ignorar */
             }
           // fall through
-          case 39: break;
-          case 3:
+          case 25: break;
+          case 4:
             { string.setLength(0); yybegin(ITALIC);
             }
           // fall through
-          case 40: break;
-          case 4:
+          case 26: break;
+          case 5:
             { string.setLength(0); yybegin(NOT_ORDERED_LIST);
             }
           // fall through
-          case 41: break;
-          case 5:
+          case 27: break;
+          case 6:
             { string.append(yytext());
             }
           // fall through
-          case 42: break;
-          case 6:
-            { error("Literal de cadena sin terminar al final de la línea");
-            }
-          // fall through
-          case 43: break;
+          case 28: break;
           case 7:
-            { yybegin(YYINITIAL); return symbol(sym.STRING_LIT, string.toString());
+            { string.append("\n");
             }
           // fall through
-          case 44: break;
+          case 29: break;
           case 8:
-            { error("Secuencia ilegal de escape \"" + yytext() + "\"");
+            { yybegin(YYINITIAL); return symbol(sym.ITALIC, string.toString().trim());
             }
           // fall through
-          case 45: break;
+          case 30: break;
           case 9:
-            { yybegin(YYINITIAL);
-        return symbol(sym.HEADER6, string.toString());
-            }
-          // fall through
-          case 46: break;
-          case 10:
-            { yybegin(YYINITIAL);
-        return symbol(sym.HEADER5, string.toString());
-            }
-          // fall through
-          case 47: break;
-          case 11:
-            { yybegin(YYINITIAL);
-        return symbol(sym.HEADER4, string.toString());
-            }
-          // fall through
-          case 48: break;
-          case 12:
-            { yybegin(YYINITIAL);
-        return symbol(sym.HEADER3, string.toString());
-            }
-          // fall through
-          case 49: break;
-          case 13:
-            { yybegin(YYINITIAL);
-        return symbol(sym.HEADER2, string.toString());
-            }
-          // fall through
-          case 50: break;
-          case 14:
-            { yybegin(YYINITIAL);
-        return symbol(sym.HEADER1, string.toString());
-            }
-          // fall through
-          case 51: break;
-          case 15:
-            { yybegin(YYINITIAL); return symbol(sym.ITALIC, string.toString());
-            }
-          // fall through
-          case 52: break;
-          case 16:
             { yybegin(YYINITIAL); return symbol(sym.ORDERED_LIST_ITEM, string.toString());
             }
           // fall through
-          case 53: break;
-          case 17:
+          case 31: break;
+          case 10:
             { yybegin(YYINITIAL); return symbol(sym.NOT_ORDERED_LIST_ITEM, string.toString());
             }
           // fall through
-          case 54: break;
-          case 18:
+          case 32: break;
+          case 11:
+            { yybegin(YYINITIAL);
+        return symbol(sym.STRING_LIT, string.toString().trim());
+            }
+          // fall through
+          case 33: break;
+          case 12:
             { string.setLength(0); yybegin(HEADER1);
             }
           // fall through
-          case 55: break;
-          case 19:
+          case 34: break;
+          case 13:
             { string.setLength(0); yybegin(BOLD);
             }
           // fall through
-          case 56: break;
-          case 20:
+          case 35: break;
+          case 14:
             { string.setLength(0); yybegin(ORDERED_LIST);
             }
           // fall through
-          case 57: break;
-          case 21:
-            { string.append('\"');
+          case 36: break;
+          case 15:
+            { yybegin(YYINITIAL); return symbol(sym.BOLD, string.toString().trim());
             }
           // fall through
-          case 58: break;
-          case 22:
-            { string.append('\'');
-            }
-          // fall through
-          case 59: break;
-          case 23:
-            { char val = (char) Integer.parseInt(yytext().substring(1), 8);
-        string.append(val);
-            }
-          // fall through
-          case 60: break;
-          case 24:
-            { string.append('\\');
-            }
-          // fall through
-          case 61: break;
-          case 25:
-            { string.append('\b');
-            }
-          // fall through
-          case 62: break;
-          case 26:
-            { string.append('\f');
-            }
-          // fall through
-          case 63: break;
-          case 27:
-            { string.append('\n');
-            }
-          // fall through
-          case 64: break;
-          case 28:
-            { string.append('\r');
-            }
-          // fall through
-          case 65: break;
-          case 29:
-            { string.append('\t');
-            }
-          // fall through
-          case 66: break;
-          case 30:
-            { yybegin(YYINITIAL); return symbol(sym.BOLD, string.toString());
-            }
-          // fall through
-          case 67: break;
-          case 31:
+          case 37: break;
+          case 16:
             { string.setLength(0); yybegin(HEADER2);
             }
           // fall through
-          case 68: break;
-          case 32:
+          case 38: break;
+          case 17:
             { string.setLength(0); yybegin(BOLD_ITALIC);
             }
           // fall through
-          case 69: break;
-          case 33:
-            { yybegin(YYINITIAL); return symbol(sym.BOLD_ITALIC, string.toString());
+          case 39: break;
+          case 18:
+            { yybegin(YYINITIAL); return symbol(sym.BOLD_ITALIC, string.toString().trim());
             }
           // fall through
-          case 70: break;
-          case 34:
+          case 40: break;
+          case 19:
             { string.setLength(0); yybegin(HEADER3);
             }
           // fall through
-          case 71: break;
-          case 35:
+          case 41: break;
+          case 20:
             { string.setLength(0); yybegin(HEADER4);
             }
           // fall through
-          case 72: break;
-          case 36:
+          case 42: break;
+          case 21:
             { string.setLength(0); yybegin(HEADER5);
             }
           // fall through
-          case 73: break;
-          case 37:
+          case 43: break;
+          case 22:
             { string.setLength(0); yybegin(HEADER6);
             }
           // fall through
-          case 74: break;
+          case 44: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
