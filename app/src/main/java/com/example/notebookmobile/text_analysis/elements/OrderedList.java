@@ -8,6 +8,7 @@ public class OrderedList extends Element {
 
     public OrderedList(String content) {
         this.content = content;
+        this.count = 1;
     }
 
     @Override
