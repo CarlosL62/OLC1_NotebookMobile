@@ -5,6 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/codeImageView"
+        android:layout_width="56dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/code_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/executeButton" />
+
     <TextView
         android:id="@+id/codeResponse"
         android:layout_width="335dp"

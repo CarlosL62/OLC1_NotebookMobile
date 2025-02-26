@@ -35,4 +35,13 @@
         android:inputType="textMultiLine"
         app:layout_constraintStart_toEndOf="@+id/executeButton"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/textImageView"
+        android:layout_width="56dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="4dp"
+        android:src="@drawable/text_icon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/executeButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
