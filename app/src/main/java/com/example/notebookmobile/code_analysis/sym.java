@@ -19,12 +19,13 @@ public class sym {
   public static final int COMMA = 14;
   public static final int EOF = 0;
   public static final int DIV = 6;
-  public static final int INTEGER_LIT = 17;
+  public static final int INTEGER_LIT = 18;
   public static final int MINUS = 3;
   public static final int PRINT = 10;
   public static final int error = 1;
   public static final int FORMAT = 12;
-  public static final int FLOAT_LIT = 18;
+  public static final int FLOAT_LIT = 19;
+  public static final int MATH_FUNCTION = 17;
   public static final int POWER = 5;
   public static final int UMINUS = 13;
   public static final String[] terminalNames = new String[] {
@@ -45,6 +46,7 @@ public class sym {
   "COMMA",
   "ID",
   "STRING_LIT",
+  "MATH_FUNCTION",
   "INTEGER_LIT",
   "FLOAT_LIT"
   };

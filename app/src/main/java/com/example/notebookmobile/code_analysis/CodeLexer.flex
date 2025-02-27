@@ -21,6 +21,8 @@ import java.util.*;
 
 /**************************** States **********************************/
 %state STRING
+%state PLOT_FUNCTION
+%state MATH_FUNCTION
 
 /**************************** macros **********************************/
 LineTerminator = \r|\n|\r\n
@@ -43,6 +45,9 @@ OctDigit          = [0-7]
     public List<String> symbols = new ArrayList();
 
     public List<String> getErrors(){
+        if (this.errorsList == null) {
+            this.errorsList = new LinkedList<>();
+        }
         return this.errorsList;
     }
 
@@ -72,7 +77,14 @@ OctDigit          = [0-7]
     /*-------------------------------------------------------------------------------
                                 Text Marks
     ----------------------------------------------------------------------------------*/
-    /* Operators */
+
+
+    /*-------------------------------------------------------------
+     *                      Default State
+     --------------------------------------------------------------*/
+    <YYINITIAL> {
+
+        /* Operators */
         "+"             { return symbol(sym.PLUS); }
         "-"             { return symbol(sym.MINUS); }
         "*"             { return symbol(sym.TIMES); }
@@ -80,30 +92,43 @@ OctDigit          = [0-7]
         "^"             { return symbol(sym.POWER); }
         "="             { return symbol(sym.EQUALS); }
 
-    /* delimitators */
+        /* delimitators */
         "("             { return symbol(sym.LPAREN); }
         ")"             { return symbol(sym.RPAREN); }
         ","             { return symbol(sym.COMMA); }
 
-
-    /*-------------------------------------------------------------
-     *                      Default State
-     --------------------------------------------------------------*/
-    <YYINITIAL> {
         /* keywords */
         "print"       { return symbol(sym.PRINT); }
         "format"      { return symbol(sym.FORMAT); }
-        "plot"        { return symbol(sym.PLOT); }
+        "plot"        { yybegin(PLOT_FUNCTION); return symbol(sym.PLOT); }
 
 
         /* literals */
         {Identifier}    { return symbol( sym.ID, yytext() ); }
 
-        {DecIntegerLiteral}    { return symbol(sym.INTEGER_LIT, Float.valueOf(yytext())); }
+        {DecIntegerLiteral}    { return symbol(sym.FLOAT_LIT, Float.valueOf(yytext())); }
 
         {DecFloatLiteral}    { return symbol(sym.FLOAT_LIT, Float.valueOf(yytext())); }
 
         \"              { string.setLength(0); yybegin(STRING); }
+    }
+
+    <PLOT_FUNCTION> {
+        "("             { yybegin(MATH_FUNCTION); return symbol(sym.LPAREN); }
+    }
+
+    <MATH_FUNCTION> {
+        "x"                     { string.append("x"); }
+        "+"                     { string.append("+"); }
+        "-"                     { string.append("-"); }
+        "*"                     { string.append("*"); }
+        "/"                     { string.append("/"); }
+        "^"                     { string.append("^"); }
+        "("                     { string.append("("); }
+        ")"                     { string.append(")"); }
+        {DecFloatLiteral}       { string.append(yytext()); }
+        {DecIntegerLiteral}     { string.append(yytext()); }
+        ","                     { yybegin(YYINITIAL); return symbol(sym.MATH_FUNCTION, string.toString()); }
     }
 
     <STRING> {

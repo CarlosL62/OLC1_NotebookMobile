@@ -17,6 +17,7 @@ public class Analyzer {
 
     public Analyzer(TextView responseTextView) {
         this.responseTextView = responseTextView;
+        this.semanticErrors = new LinkedList<>();
     }
 
     public void execute(List<Instruction> instructions) {
@@ -37,7 +38,9 @@ public class Analyzer {
 
         try {
             parser.parse();
-            if(lexer.getErrors().isEmpty() && parser.getSyntaxErrors().isEmpty() && semanticErrors.isEmpty()) {
+            if(lexer.getErrors().isEmpty() &&
+                    (parser.getSyntaxErrors() != null && parser.getSyntaxErrors().isEmpty()) &&
+                    (semanticErrors != null && semanticErrors.isEmpty())) {
                 responseTextView.setText(terminal.toString());
             } else {
                 for (String lexerError : lexer.getErrors()) {
@@ -51,7 +54,7 @@ public class Analyzer {
                 }
             }
         } catch (Exception e) {
-            responseTextView.setText(e.getMessage());
+            responseTextView.setText(e.getMessage() + "Error at analyzing code");
         }
     }
 }

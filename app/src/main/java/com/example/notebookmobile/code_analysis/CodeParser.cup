@@ -5,6 +5,7 @@ import java.util.*;
 
 import com.example.notebookmobile.code_analysis.instructions.*;
 import com.example.notebookmobile.code_analysis.expressions.*;
+import com.example.notebookmobile.code_analysis.math_expressions.*;
 import com.example.notebookmobile.code_analysis.utils.*;
 
 parser code {:
@@ -24,7 +25,10 @@ parser code {:
     public CodeLexer getLexer(){
         return this.lex;
     }
-    public List<String> getSyntaxErrors(){
+    public List<String> getSyntaxErrors() {
+        if (this.syntaxErrors == null) {
+            this.syntaxErrors = new LinkedList<>();
+        }
         return this.syntaxErrors;
     }
 
@@ -99,7 +103,7 @@ terminal PLUS, MINUS, TIMES, POWER, DIV,
            PRINT, PLOT, FORMAT,
            UMINUS, COMMA;
 
-terminal String     ID, STRING_LIT;
+terminal String     ID, STRING_LIT, MATH_FUNCTION;
 terminal Float    INTEGER_LIT, FLOAT_LIT;
 
 
@@ -109,7 +113,8 @@ non terminal s;
 non terminal List<Instruction>  instructions;
 
 non terminal Expression operable, expression;
-non terminal Instruction print_function, plot_function, format_function, mathFunction, assignation, instruction;
+non terminal MathExpression math_expression;
+non terminal Instruction print_function, plot_function, format_function, assignation, instruction;
 
 /*------------------------------------------------------------------------------
                                  Precedences
@@ -128,7 +133,9 @@ start with s;
 
 s ::= instructions:list
         {:
-
+            if (list == null) {
+                list = new LinkedList<>();
+            }
             analyzer.execute(list);
         :}
     ;
@@ -166,10 +173,85 @@ print_function ::= PRINT:p LPAREN expression:e RPAREN
         :}
     ;
 
-plot_function ::= PLOT:p LPAREN operable:e COMMA operable:e1 COMMA operable:e2 RPAREN
+plot_function ::= PLOT:p LPAREN MATH_FUNCTION:e FLOAT_LIT:e1 COMMA FLOAT_LIT:e2 RPAREN
         {:
-            //TODO
+
+            RESULT = new PlotFunction(e, e1, e2, new Position(pleft, pright));
         :}
+    ;
+
+math_expression ::= math_expression:e1 PLUS:o math_expression:e2
+            {:
+                RESULT = new OperationMathExp(
+                    DefineOperation.PLUS,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | math_expression:e1 MINUS:o math_expression:e2
+            {:
+                RESULT = new OperationMathExp(
+                    DefineOperation.MINUS,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | math_expression:e1 DIV:o math_expression:e2
+            {:
+                RESULT = new OperationMathExp(
+                    DefineOperation.DIV,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | math_expression:e1 TIMES:o math_expression:e2
+            {:
+                RESULT = new OperationMathExp(
+                    DefineOperation.TIMES,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | math_expression:e1 POWER:o math_expression:e2
+            {:
+                RESULT = new OperationMathExp(
+                    DefineOperation.POWER,
+                    e1, e2,
+                    new Position(oleft, oright)
+                );
+            :}
+    | LPAREN
+            {:
+                RESULT = new LiteralMathExp("(");
+            :}
+    | RPAREN
+            {:
+                RESULT = new LiteralMathExp(")");
+            :}
+    | PLUS:o math_expression:e
+            {:
+                RESULT = new UnaryOperationMathExp(
+                    DefineOperation.PLUS, e, new Position(oleft, oright)
+                );
+            :}
+    | MINUS:o math_expression:e
+            {:
+                RESULT = new UnaryOperationMathExp(
+                    DefineOperation.MINUS, e, new Position(oleft, oright)
+                );
+            :}
+    | INTEGER_LIT:l
+            {:
+                RESULT = new LiteralMathExp(l);
+            :}
+    | FLOAT_LIT:l
+            {:
+                RESULT = new LiteralMathExp(l);
+            :}
+    | ID:i
+            {:
+                RESULT = new VariableMathExp(i, new Position(ileft, iright));
+            :}
     ;
 
 format_function ::= FORMAT:f LPAREN operable:s RPAREN
