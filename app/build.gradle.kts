@@ -43,6 +43,10 @@ android {
             java.srcDir("src/main/java/com/example/notebookmobile")
         }
     }*/
+
+    packagingOptions {
+        exclude("META-INF/COPYING")
+    }
 }
 
 dependencies {
@@ -69,8 +73,8 @@ dependencies {
     implementation(files("src/main/java/com/example/notebookmobile/libs/java-cup-11b-runtime.jar"))
     // Implementation for math expression evaluator
     implementation(libs.exp4j)
-    // Implementation for math view
-    //implementation(libs.mathview)
+    // Implementation for JLaTeXMath
+    //implementation(libs.jlatexmath)
 }
 
 // TASKS TO GENERATE LEXERS AND PARSERS

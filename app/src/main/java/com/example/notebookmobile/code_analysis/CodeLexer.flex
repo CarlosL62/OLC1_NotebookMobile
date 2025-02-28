@@ -22,7 +22,9 @@ import java.util.*;
 /**************************** States **********************************/
 %state STRING
 %state PLOT_FUNCTION
+%state FORMAT_FUNCTION
 %state MATH_FUNCTION
+%state MATH_EXP
 
 /**************************** macros **********************************/
 LineTerminator = \r|\n|\r\n
@@ -43,6 +45,8 @@ OctDigit          = [0-7]
   -------------------------------------------------------------------*/
     private List<String> errorsList;
     public List<String> symbols = new ArrayList();
+
+    private int parenCount = 0; // Counter for parenthesis
 
     public List<String> getErrors(){
         if (this.errorsList == null) {
@@ -99,7 +103,7 @@ OctDigit          = [0-7]
 
         /* keywords */
         "print"       { return symbol(sym.PRINT); }
-        "format"      { return symbol(sym.FORMAT); }
+        "format"      { yybegin(FORMAT_FUNCTION); return symbol(sym.FORMAT); }
         "plot"        { yybegin(PLOT_FUNCTION); return symbol(sym.PLOT); }
 
 
@@ -115,6 +119,32 @@ OctDigit          = [0-7]
 
     <PLOT_FUNCTION> {
         "("             { yybegin(MATH_FUNCTION); return symbol(sym.LPAREN); }
+    }
+
+    <FORMAT_FUNCTION> {
+        "("             { yybegin(MATH_EXP); return symbol(sym.LPAREN); }
+    }
+
+    <MATH_EXP> {
+        "x"                     { string.append("x"); }
+        "+"                     { string.append("+"); }
+        "-"                     { string.append("-"); }
+        "*"                     { string.append("*"); }
+        "/"                     { string.append("/"); }
+        "^"                     { string.append("^"); }
+        "("                     { string.append("("); parenCount++; } // Aumentamos contador de paréntesis abiertos
+        {DecFloatLiteral}       { string.append(yytext()); }
+        {DecIntegerLiteral}     { string.append(yytext()); }
+
+        ")" {
+            string.append(")");
+            if (parenCount > 0) {
+                parenCount--; // Cerramos un paréntesis
+            } else {
+                yybegin(YYINITIAL); // Si ya no hay paréntesis abiertos, volvemos al estado inicial
+                return symbol(sym.MATH_EXP, string.toString());
+            }
+        }
     }
 
     <MATH_FUNCTION> {

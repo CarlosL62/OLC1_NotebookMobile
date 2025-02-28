@@ -18,8 +18,9 @@ parser code {:
     public CodeParser(CodeLexer lex, Analyzer analyzer){
         super(lex);
         this.analyzer = analyzer;
-        syntaxErrors = new LinkedList<>();
+        this.syntaxErrors = new LinkedList<>();
     }
+
 
     // Getters
     public CodeLexer getLexer(){
@@ -103,7 +104,7 @@ terminal PLUS, MINUS, TIMES, POWER, DIV,
            PRINT, PLOT, FORMAT,
            UMINUS, COMMA;
 
-terminal String     ID, STRING_LIT, MATH_FUNCTION;
+terminal String     ID, STRING_LIT, MATH_FUNCTION, MATH_EXP;
 terminal Float    INTEGER_LIT, FLOAT_LIT;
 
 
@@ -158,6 +159,8 @@ instruction ::= assignation:i
     | print_function:i
         {: RESULT = i; :}
     | plot_function:i
+        {: RESULT = i; :}
+    | format_function:i
         {: RESULT = i; :}
     ;
 
@@ -254,9 +257,9 @@ math_expression ::= math_expression:e1 PLUS:o math_expression:e2
             :}
     ;
 
-format_function ::= FORMAT:f LPAREN operable:s RPAREN
+format_function ::= FORMAT:f LPAREN MATH_EXP:s
         {:
-            //TODO
+            RESULT = new FormatFunction(s, new Position(fleft, fright));
         :}
     ;
 

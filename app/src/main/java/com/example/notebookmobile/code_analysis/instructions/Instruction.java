@@ -8,6 +8,5 @@ public abstract class Instruction {
 
     protected Position position;
 
-    // Public abstract method void execute(Object SymbolTable, Object Terminal)
     public abstract void execute(HashMap<String, Object> symbolsTable, StringBuilder terminal, List<String> semanticErrors);
 }
