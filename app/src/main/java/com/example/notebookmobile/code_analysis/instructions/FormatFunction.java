@@ -21,14 +21,10 @@ public class FormatFunction extends Instruction {
     private String convertToLatex(String expression) {
         try {
             String formattedExpression = expression
-                    .replaceAll("\\*", " \\cdot ")     // Multiplicación
-                    .replaceAll("\\b(\\w+)\\s*\\^\\s*(\\d+)\\b", "$1^{ $2 }") // Exponentes correctamente formateados
-                    .replaceAll("sin", "\\\\sin")
-                    .replaceAll("cos", "\\\\cos")
-                    .replaceAll("tan", "\\\\tan")
-                    .replaceAll("log", "\\\\log");
+                    .replaceAll("\\*", " \\cdot ")
+                    .replaceAll("\\b(\\w+)\\s*\\^\\s*(\\d+)\\b", "$1^{ $2 }");
 
-            // Convertir divisiones en \frac{a}{b}
+            // Convert divs to \frac{a}{b}
             formattedExpression = formattedExpression.replaceAll("(\\w+)\\s*/\\s*(\\w+)", "\\\\frac{$1}{$2}");
 
             return "$$" + formattedExpression + "$$";

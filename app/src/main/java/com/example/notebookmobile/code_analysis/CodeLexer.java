@@ -1060,7 +1060,7 @@ public class CodeLexer implements java_cup.runtime.Scanner {
             zzDoEOF();
               {
                 System.out.println("line: "+(yyline+1)+" "+"col: "+(yycolumn+1)+" "+"match: <<EOF>>");
-                System.out.println("action [192] { return symbol(sym.EOF); }");
+                System.out.println("action [191] { return symbol(sym.EOF); }");
                 return symbol(sym.EOF);
               }
       }
@@ -1068,15 +1068,15 @@ public class CodeLexer implements java_cup.runtime.Scanner {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
             System.out.println("line: "+(yyline+1)+" "+"col: "+(yycolumn+1)+" "+"match: --"+zzToPrintable(yytext())+"--");
-            System.out.println("action [191] { error(\"Simbolo invalido <\"+ yytext()+\">\"); }");
+            System.out.println("action [190] { error(\"Simbolo invalido <\"+ yytext()+\">\"); }");
             { error("Simbolo invalido <"+ yytext()+">");
             }
           // fall through
           case 45: break;
           case 2:
             System.out.println("line: "+(yyline+1)+" "+"col: "+(yycolumn+1)+" "+"match: --"+zzToPrintable(yytext())+"--");
-            System.out.println("action [188] { /* ignoramos */ }");
-            { /* ignoramos */
+            System.out.println("action [187] { /* ignore */ }");
+            { /* ignore */
             }
           // fall through
           case 46: break;

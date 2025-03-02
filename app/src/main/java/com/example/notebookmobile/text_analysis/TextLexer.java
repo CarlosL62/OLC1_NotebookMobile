@@ -776,7 +776,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
               sym.HEADER1;
 
               yybegin(YYINITIAL);
-              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+              return symbol(type, string.toString().trim()); // Delete extra spaces
             }  // fall though
             case 49: break;
             case HEADER5: {
@@ -789,7 +789,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
               sym.HEADER1;
 
               yybegin(YYINITIAL);
-              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+              return symbol(type, string.toString().trim()); // Delete extra spaces
             }  // fall though
             case 50: break;
             case HEADER4: {
@@ -802,7 +802,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
               sym.HEADER1;
 
               yybegin(YYINITIAL);
-              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+              return symbol(type, string.toString().trim()); // Delete extra spaces
             }  // fall though
             case 51: break;
             case HEADER3: {
@@ -815,7 +815,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
               sym.HEADER1;
 
               yybegin(YYINITIAL);
-              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+              return symbol(type, string.toString().trim()); // Delete extra spaces
             }  // fall though
             case 52: break;
             case HEADER2: {
@@ -828,7 +828,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
               sym.HEADER1;
 
               yybegin(YYINITIAL);
-              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+              return symbol(type, string.toString().trim()); // Delete extra spaces
             }  // fall though
             case 53: break;
             case HEADER1: {
@@ -841,7 +841,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
               sym.HEADER1;
 
               yybegin(YYINITIAL);
-              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+              return symbol(type, string.toString().trim()); // Delete extra spaces
             }  // fall though
             case 54: break;
             case ORDERED_LIST: {
@@ -875,7 +875,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
             sym.HEADER1;
 
         yybegin(YYINITIAL);
-        return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+        return symbol(type, string.toString().trim()); // Delete extra spaces
             }
           // fall through
           case 23: break;
@@ -885,7 +885,7 @@ public class TextLexer implements java_cup.runtime.Scanner {
           // fall through
           case 24: break;
           case 3:
-            { /* Ignorar */
+            { /* Ignore */
             }
           // fall through
           case 25: break;

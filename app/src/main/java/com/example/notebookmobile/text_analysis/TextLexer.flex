@@ -116,7 +116,7 @@ DOT = \.
             sym.HEADER1;
 
         yybegin(YYINITIAL);
-        return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+        return symbol(type, string.toString().trim()); // Delete extra spaces
     }
 
     <<EOF>> {
@@ -129,7 +129,7 @@ DOT = \.
               sym.HEADER1;
 
               yybegin(YYINITIAL);
-              return symbol(type, string.toString().trim()); // Se asegura de eliminar espacios extra
+              return symbol(type, string.toString().trim()); // Delete extra spaces
       }
 }
 
@@ -175,7 +175,7 @@ DOT = \.
 }
 
 /* Ignored whitespace */
-{WhiteSpace} { /* Ignorar */ }
+{WhiteSpace} { /* Ignore */ }
 
 /* Error handling */
 . { error("Símbolo inválido <" + yytext() + ">"); }

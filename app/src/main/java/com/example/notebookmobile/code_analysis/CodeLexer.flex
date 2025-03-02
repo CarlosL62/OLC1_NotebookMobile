@@ -132,7 +132,7 @@ OctDigit          = [0-7]
         "*"                     { string.append("*"); }
         "/"                     { string.append("/"); }
         "^"                     { string.append("^"); }
-        "("                     { string.append("("); parenCount++; } // Aumentamos contador de paréntesis abiertos
+        "("                     { string.append("("); parenCount++; } // Counter for parenthesis to close
         {DecFloatLiteral}       { string.append(yytext()); }
         {DecIntegerLiteral}     { string.append(yytext()); }
 
@@ -184,8 +184,7 @@ OctDigit          = [0-7]
         {LineTerminator}               { error("Literal de cadena sin terminar al final de la línea"); }
     }
 
-    /*lo ignorado*/
-    {WhiteSpace}     {/* ignoramos */}
+    {WhiteSpace}     {/* ignore */}
 
     /* error fallback */
     .               { error("Simbolo invalido <"+ yytext()+">");}
