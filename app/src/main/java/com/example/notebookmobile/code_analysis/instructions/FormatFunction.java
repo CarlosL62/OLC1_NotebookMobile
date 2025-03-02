@@ -21,18 +21,15 @@ public class FormatFunction extends Instruction {
     private String convertToLatex(String expression) {
         try {
             String formattedExpression = expression
-                    .replaceAll("\\*", " \\cdot ")   // Multiplicación
-                    .replaceAll("\\^", "^{")         // Exponentes (se cierran abajo)
-                    .replaceAll("sin", "\\\\sin")    // Función seno
-                    .replaceAll("cos", "\\\\cos")    // Función coseno
-                    .replaceAll("tan", "\\\\tan")    // Función tangente
-                    .replaceAll("log", "\\\\log");   // Logaritmo
+                    .replaceAll("\\*", " \\cdot ")     // Multiplicación
+                    .replaceAll("\\b(\\w+)\\s*\\^\\s*(\\d+)\\b", "$1^{ $2 }") // Exponentes correctamente formateados
+                    .replaceAll("sin", "\\\\sin")
+                    .replaceAll("cos", "\\\\cos")
+                    .replaceAll("tan", "\\\\tan")
+                    .replaceAll("log", "\\\\log");
 
             // Convertir divisiones en \frac{a}{b}
             formattedExpression = formattedExpression.replaceAll("(\\w+)\\s*/\\s*(\\w+)", "\\\\frac{$1}{$2}");
-
-            // Cerrar correctamente exponentes abiertos
-            formattedExpression = formattedExpression.replaceAll("\\{([^}]*)$", "{$1}");
 
             return "$$" + formattedExpression + "$$";
         } catch (Exception e) {
@@ -40,5 +37,6 @@ public class FormatFunction extends Instruction {
             return "$$\\text{Expresión inválida}$$";
         }
     }
+
 
 }
