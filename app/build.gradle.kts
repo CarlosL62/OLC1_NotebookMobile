@@ -75,6 +75,7 @@ dependencies {
     implementation(libs.exp4j)
     // Implementation for JLaTeXMath
     //implementation(libs.jlatexmath)
+    implementation("ru.noties:jlatexmath-android:0.2.0")
 }
 
 // TASKS TO GENERATE LEXERS AND PARSERS

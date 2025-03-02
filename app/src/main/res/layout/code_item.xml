@@ -44,4 +44,14 @@
         android:inputType="textMultiLine"
         app:layout_constraintStart_toEndOf="@+id/executeButton"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/mathImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="?android:attr/editTextBackground"
+        android:visibility="visible"
+        app:layout_constraintStart_toEndOf="@+id/codeImageView"
+        app:layout_constraintTop_toBottomOf="@+id/codeResponse"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

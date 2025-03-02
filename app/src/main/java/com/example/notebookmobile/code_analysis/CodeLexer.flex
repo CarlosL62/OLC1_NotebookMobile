@@ -139,9 +139,10 @@ OctDigit          = [0-7]
         ")" {
             string.append(")");
             if (parenCount > 0) {
-                parenCount--; // Cerramos un paréntesis
+                parenCount--; // Close one parenthesis
             } else {
-                yybegin(YYINITIAL); // Si ya no hay paréntesis abiertos, volvemos al estado inicial
+                yybegin(YYINITIAL); // No more parenthesis to close, return to default state
+                string.deleteCharAt(string.length() - 1); // Delete last parenthesis
                 return symbol(sym.MATH_EXP, string.toString());
             }
         }

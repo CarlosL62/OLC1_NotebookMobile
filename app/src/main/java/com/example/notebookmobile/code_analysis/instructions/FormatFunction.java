@@ -15,31 +15,30 @@ public class FormatFunction extends Instruction {
     @Override
     public void execute(HashMap<String, Object> symbolsTable, StringBuilder terminal, List<String> semanticErrors) {
         String latexExpression = convertToLatex(mathExpression);
-
-        // Agrega la expresión formateada al terminal (StringBuilder)
         terminal.append("LaTeX: ").append(latexExpression).append("\n");
     }
 
     private String convertToLatex(String expression) {
-        // Reemplazos básicos para convertir operadores a LaTeX
-        String latexExpr = expression.replace("^", "^{")
-                .replace("*", "\\cdot ")
-                .replace("(", "\\left(")
-                .replace(")", "\\right)");
+        try {
+            String formattedExpression = expression
+                    .replaceAll("\\*", " \\cdot ")   // Multiplicación
+                    .replaceAll("\\^", "^{")         // Exponentes (se cierran abajo)
+                    .replaceAll("sin", "\\\\sin")    // Función seno
+                    .replaceAll("cos", "\\\\cos")    // Función coseno
+                    .replaceAll("tan", "\\\\tan")    // Función tangente
+                    .replaceAll("log", "\\\\log");   // Logaritmo
 
-        // Manejo de fracciones
-        latexExpr = replaceFractions(latexExpr);
+            // Convertir divisiones en \frac{a}{b}
+            formattedExpression = formattedExpression.replaceAll("(\\w+)\\s*/\\s*(\\w+)", "\\\\frac{$1}{$2}");
 
-        return "$" + latexExpr + "$"; // Devuelve la expresión delimitada por $
+            // Cerrar correctamente exponentes abiertos
+            formattedExpression = formattedExpression.replaceAll("\\{([^}]*)$", "{$1}");
+
+            return "$$" + formattedExpression + "$$";
+        } catch (Exception e) {
+            System.err.println("❌ Error al convertir a LaTeX: " + e.getMessage());
+            return "$$\\text{Expresión inválida}$$";
+        }
     }
 
-    private String replaceFractions(String expression) {
-        // x/(x*y) -> \frac{x}{x*y}
-        expression = expression.replaceAll("(\\w+)\\s*/\\s*\\(([^)]+)\\)", "\\\\frac{\\1}{\\2}");
-
-        // a/b -> \frac{a}{b}
-        expression = expression.replaceAll("(\\w+)\\s*/\\s*(\\w+)", "\\\\frac{\\1}{\\2}");
-
-        return expression;
-    }
 }

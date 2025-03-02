@@ -3,6 +3,7 @@ package com.example.notebookmobile
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -39,13 +40,14 @@ class MainActivity : ComponentActivity() {
             val editText = codeItem.findViewById<EditText>(R.id.editTextTextMultiLine)
             val executeButton = codeItem.findViewById<Button>(R.id.executeButton)
             val responseTextView = codeItem.findViewById<TextView>(R.id.codeResponse)
+            val mathImageView = codeItem.findViewById<ImageView>(R.id.mathImageView)
 
             container.addView(codeItem)
 
 
             executeButton.setOnClickListener {
                 val response = editText.text.toString()
-                val analyzer = Analyzer(responseTextView)
+                val analyzer = Analyzer(responseTextView, mathImageView)
                 analyzer.executeCode(response)
             }
         }
