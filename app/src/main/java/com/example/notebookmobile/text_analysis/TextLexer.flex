@@ -98,7 +98,7 @@ DOT = \.
     // Not ordered list
     "+" { string.setLength(0); yybegin(NOT_ORDERED_LIST); }
 
-    // Text (todo lo demás es texto normal)
+    // Text
     . { string.setLength(0); string.append(yytext()); yybegin(STRING_LIT); }
 }
 

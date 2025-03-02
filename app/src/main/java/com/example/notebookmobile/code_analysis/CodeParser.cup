@@ -152,6 +152,10 @@ instructions ::= instruction:i
             l.add(0, i);
             RESULT = l;
         :}
+      | error
+        {:
+            RESULT = null;
+        :}
     ;
 
 instruction ::= assignation:i
